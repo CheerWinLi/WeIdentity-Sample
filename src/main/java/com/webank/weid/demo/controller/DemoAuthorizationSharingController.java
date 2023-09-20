@@ -2,12 +2,15 @@ package com.webank.weid.demo.controller;
 
 import com.webank.weid.blockchain.constant.ErrorCode;
 import com.webank.weid.blockchain.protocol.response.ResponseData;
+import com.webank.weid.demo.common.model.CreateQualificationCertificateModel;
+import com.webank.weid.demo.common.model.CreateStudentIDCARDModel;
 import com.webank.weid.demo.common.model.QualificationCertificateModel;
 import com.webank.weid.demo.common.model.StudentIDCARDModel;
 import com.webank.weid.demo.common.util.PrivateKeyUtil;
 import com.webank.weid.demo.service.DemoOtherService;
 import com.webank.weid.demo.service.DemoService;
 import com.webank.weid.protocol.base.CptBaseInfo;
+import com.webank.weid.protocol.base.CredentialPojo;
 import com.webank.weid.protocol.response.CreateWeIdDataResult;
 import com.webank.weid.util.DataToolUtils;
 import io.swagger.annotations.Api;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +97,58 @@ public class DemoAuthorizationSharingController {
         } catch (Exception e) {
             logger.error("registCpt error", e);
             return new ResponseData<>(null, ErrorCode.TRANSACTION_EXECUTE_ERROR);
+        }
+    }
+
+    /**
+     * institutional publication of Credential.
+     *
+     * @return returns  credential
+     * @throws IOException  it's possible to throw an exception
+     */
+    @ApiOperation(value = "颁发资格证电子凭证")
+    @PostMapping("/step3/qualificationcertificate/createCredential")
+    public ResponseData<CredentialPojo> createCredential(
+            @ApiParam(name = "createIDCARDModel", value = "创建电子凭证")
+            @RequestBody CreateQualificationCertificateModel createQualificationCertificateModel) {
+
+        ResponseData<CredentialPojo> response;
+        try {
+            if (null == createQualificationCertificateModel) {
+                return new ResponseData<>(null, ErrorCode.ILLEGAL_INPUT);
+            }
+            // getting cptId data.
+            Integer cptId = createQualificationCertificateModel.getCptId();
+            // getting issuer data.
+            String issuer = createQualificationCertificateModel.getIssuer();
+            // getting claimData data.
+            String claimData = DataToolUtils.mapToCompactJson(createQualificationCertificateModel.getClaimData());
+
+            // get the private key from the file according to weId.
+            String privateKey = PrivateKeyUtil.getPrivateKeyByWeId(PrivateKeyUtil.KEY_DIR, issuer);
+            logger.info(
+                    "param,cptId:{},issuer:{},privateKey:{},claimData:{}",
+                    cptId,
+                    issuer,
+                    privateKey,
+                    claimData
+            );
+            // converting claimData in JSON format to map.
+            Map<String, Object> claimDataMap = new HashMap<String, Object>();
+            claimDataMap =
+                    (Map<String, Object>) DataToolUtils.deserialize(
+                            claimData,
+                            claimDataMap.getClass()
+                    );
+
+            // call method to create credentials.
+            response = demoService.createCredential(cptId, issuer, privateKey, claimDataMap);
+            logger.info("createCredential response: {}",
+                    DataToolUtils.objToJsonStrWithNoPretty(response));
+            return response;
+        } catch (Exception e) {
+            logger.error("createCredential error", e);
+            return new ResponseData<CredentialPojo>(null, ErrorCode.CREDENTIAL_ERROR);
         }
     }
 

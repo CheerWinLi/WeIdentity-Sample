@@ -48,12 +48,12 @@ public class QualificationCertificateModel {
                     + "            \"type\": \"string\",\n"
                     + "            \"description\": \"the startTime of the student \"\n"
                     + "        },\n"
-                    + "          \"schoolName\": {\n"
+                    + "          \"medicalAgencyName\": {\n"
                     + "            \"type\": \"string\",\n"
-                    + "            \"description\": \"the school of the student \"\n"
+                    + "            \"description\": \"the name of the medical agency \"\n"
                     + "        }\n"
                     + "    },\n"
-                    + "    \"required\": [\"name\", \"gender\", \"cardNumber\", \"major\", \"educationalSystem\", \"startTime\",\"schoolName\"]\n"
+                    + "    \"required\": [\"name\", \"gender\", \"cardNumber\", \"major\", \"educationalSystem\", \"startTime\",\"medicalAgencyName\"]\n"
                     + "}")
     private Map<String, Object> credentialInfo;
 
