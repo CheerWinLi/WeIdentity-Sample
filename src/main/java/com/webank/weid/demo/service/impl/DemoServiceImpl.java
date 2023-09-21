@@ -335,6 +335,7 @@ public class DemoServiceImpl implements DemoService {
             registResponse.getErrorCode(), 
             registResponse.getErrorMessage()
         );
+
         return registResponse;
     }
 }

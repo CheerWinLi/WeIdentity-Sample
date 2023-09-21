@@ -21,17 +21,17 @@ public class CreateQualificationCertificateModel {
             example = "did:weid:1:0x19607cf2bc4538b49847b43688acf3befc487a41")
     private String issuer;
 
-    @ApiModelProperty(name = "studentIDCARDInfo", value = "cpt模板对应数据", required = true,
+    @ApiModelProperty(name = "qualificationCertificateInfo", value = "cpt模板对应数据", required = true,
             example = "{\n"
-                    + "    \n"
-                    + "    \"cardNumber\": \"20230960111201\",\n"
-                    + "    \"name\": \"zhang san\",\n"
-                    + "    \"schoolName\": \"中山大学\",\n"
-                    + "    \"major\": \"english\",\n"
-                    + "    \"educationalSystem\": \"4 years\",\n"
-                    + "    \"startTime\": \"2011-09-01\",\n"
-                    + "    \"gender\": \"F\"\n"
-                    + "}")
+            + "    \n"
+            + "    \"cardNumber\": \"20230960111201\",\n"
+            + "    \"name\": \"zhang san\",\n"
+            + "    \"schoolName\": \"中山大学\",\n"
+            + "    \"major\": \"english\",\n"
+            + "    \"educationalSystem\": \"4 years\",\n"
+            + "    \"startTime\": \"2011-09-01\",\n"
+            + "    \"gender\": \"F\"\n"
+            + "}")
     private Map<String, Object> claimData;
 
     public Integer getCptId() {

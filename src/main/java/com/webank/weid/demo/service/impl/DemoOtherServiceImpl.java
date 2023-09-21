@@ -345,7 +345,7 @@ public class DemoOtherServiceImpl implements DemoOtherService {
             || StringUtils.isBlank(createEvidenceModel.getWeid())) {
             return new ResponseData<>(null, ErrorCode.ILLEGAL_INPUT);
         }
-        // Hashable为接口，创建Hashable可以new实现类，例如：credentail
+        // Hashable为接口，创建Hashable可以new实现类，例如：credential
         Hashable hashable = new HashString(createEvidenceModel.getHashable());
 
         ResponseData<String> responseData = evidenceService.createEvidence(hashable,
